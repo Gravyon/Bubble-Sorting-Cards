@@ -13,7 +13,7 @@ window.onload = function() {
   //write your code here
   // generateCard();
   document.getElementById("botonCarta").onclick = generarCartas;
-  document.getElementById("botonSort").onclick = bubbleSort;
+  document.getElementById("botonSort").onclick = sortedCards;
   document.getElementById("botonClear").onclick = clearCards;
 };
 
@@ -28,36 +28,40 @@ function generateCard() {
   let numeroGenerado = numeros[numeroRandom];
   let cartaGenerada = document.querySelector(".row");
 
+  let color = paloGenerado === "♥" || paloGenerado === "♦" ? "text-danger" : "";
+  // console.log(color);
   cartaGenerada.innerHTML += `
-  <div id="cartaDiv" class="cartas col bg-light text-dark rounded p-3 border text-center">
-    <div id="paloColorUno" class="paloUno fs-1 d-flex justify-content-start">${paloGenerado}</div>
-    <div class="numero fs-1 d-flex justify-content-center">${numeroGenerado}</div>
-    <div id="paloColorDos" class="paloDos fs-1 d-flex justify-content-end">${paloGenerado}</div>
+  <div id="cartaDiv" class="cartas col bg-light rounded p-3 border text-center">
+    <div id="paloColorUno" class="paloUno fs-1 d-flex justify-content-start ${color}">${paloGenerado}</div>
+    <div class="numero fs-1 d-flex justify-content-center text-dark">${numeroGenerado}</div>
+    <div id="paloColorDos" class="paloDos fs-1 d-flex justify-content-end ${color}" >${paloGenerado}</div>
   </div>`;
 
-  if (paloGenerado == "♥" && paloGenerado == "♦") {
-    document.getElementById("paloColorUno").classList.add("text-danger");
-    document.getElementById("paloColorDos").classList.add("text-danger");
-  } else {
-    document.getElementById("paloColorUno").classList.remove("text-danger");
-    document.getElementById("paloColorDos").classList.remove("text-danger");
-  }
+  // if (paloGenerado == "♥" && paloGenerado == "♦") {
+  //   document.getElementById("paloColorUno").classList.add("text-danger");
+  //   document.getElementById("paloColorDos").classList.add("text-danger");
+  // } else {
+  //   document.getElementById("paloColorUno").classList.remove("text-danger");
+  //   document.getElementById("paloColorDos").classList.remove("text-danger");
+  // }
 
-  return [paloGenerado, numeroGenerado];
+  return [numeroGenerado, paloGenerado];
 }
 //Generas las cartas
 function generarCartas() {
-  arrayNumeroCartas = new Array();
+  arrayNumeroCartas = [];
   let valoresCarta;
-  let cartasInput = document.querySelector("input").value; // numeroCartas viene del input, segun lo ingresado
-  if (cartasInput >= "21") {
-    document.getElementById("bodyCards").innerHTML = "";
-  }
-  for (let i = 0; i < cartasInput; i++) {
+  let cartasInput = document.querySelector("input"); // cartasInput viene del input, segun lo ingresado
+  document.getElementById("bodyCards").innerHTML = "";
+
+  for (let i = 0; i < cartasInput.value; i++) {
     valoresCarta = generateCard();
+    console.log(valoresCarta);
     arrayNumeroCartas.push(valoresCarta);
   }
-
+  console.log(arrayNumeroCartas);
+  // Esto no me gusta
+  // cartasInput.value = "";
   return arrayNumeroCartas;
 }
 //Limitar input
@@ -70,32 +74,43 @@ inputLimit.addEventListener("input", function() {
   }
 });
 
-//Sorta las cartas
+//"Sortea" las cartas
 const bubbleSort = arr => {
-  let wall = arrayNumeroCartas.length - 1; //iniciamos el wall o muro al final del arrayNumeroCartasay
+  let wall = arr.length - 1; //iniciamos el wall o muro al final del array
   while (wall > 0) {
     let index = 0;
     while (index < wall) {
       //comparar las posiciones adyacentes, si la correcta es más grande, tenemos que intercambiar
-      if (arrayNumeroCartas[index] > arrayNumeroCartas[index + 1]) {
-        let aux = arrayNumeroCartas[index];
-        arrayNumeroCartas[index] = arrayNumeroCartas[index + 1];
-        arrayNumeroCartas[index + 1] = aux;
+      if (arr[index][0] > arr[index + 1][0]) {
+        let aux = arr[index];
+        arr[index] = arr[index + 1];
+        arr[index + 1] = aux;
       }
       index++;
     }
     wall--; //disminuir la pared para optimizar
   }
-  console.log(arrayNumeroCartas);
+  return arr;
+};
+
+function sortedCards() {
+  // console.log(arrayNumeroCartas);
+  let sortedArray = bubbleSort(arrayNumeroCartas);
   let cartaGenerada = document.querySelector(".row");
   document.getElementById("bodyCards").innerHTML = "";
-  for (let i = 0; i < arrayNumeroCartas.length; i++) {
+
+  for (let i = 0; i < sortedArray.length; i++) {
+    let color =
+      sortedArray[i][1] === "♥" || sortedArray[i][1] === "♦"
+        ? "text-danger"
+        : "";
     cartaGenerada.innerHTML += `
     <div class="cartas col bg-light text-dark rounded p-3 border text-center">
-      <div id="paloColorUno" class="paloUno fs-1 d-flex justify-content-start">${arrayNumeroCartas[i].paloGenerado}</div>
-      <div class="numero fs-1 d-flex justify-content-center">${arrayNumeroCartas[i].numeroGenerado}</div>
-      <div id="paloColorDos" class="paloDos fs-1 d-flex justify-content-end">${arrayNumeroCartas[i].paloGenerado}</div>
+      <div id="paloColorUno" class="paloUno fs-1 d-flex justify-content-start ${color}">${sortedArray[i][1]}</div>
+      <div class="numero fs-1 d-flex justify-content-center text-dark">${sortedArray[i][0]}</div>
+      <div id="paloColorDos" class="paloDos fs-1 d-flex justify-content-end ${color}">${sortedArray[i][1]}</div>
     </div>`;
   }
-  return arrayNumeroCartas;
-};
+  console.log(sortedArray);
+  // sortedArray = [];
+}
