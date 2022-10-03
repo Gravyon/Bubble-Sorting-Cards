@@ -8,11 +8,12 @@ let palos = ["♦", "♥", "♠", "♣"];
 // let numeros = ["A", 2, 3, 4, 5, 6, 7, 8, 9, "J", "Q", "K"];
 let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 let arrayNumeroCartas = [];
+let sortedArray = [];
 
 window.onload = function() {
   //write your code here
   // generateCard();
-  document.getElementById("botonCarta").onclick = generarCartas;
+  document.getElementById("botonCarta").onclick = generateCards;
   document.getElementById("botonSort").onclick = sortedCards;
   document.getElementById("botonClear").onclick = clearCards;
 };
@@ -48,11 +49,17 @@ function generateCard() {
   return [numeroGenerado, paloGenerado];
 }
 //Generas las cartas
-function generarCartas() {
+function generateCards() {
   arrayNumeroCartas = [];
   let valoresCarta;
   let cartasInput = document.querySelector("input"); // cartasInput viene del input, segun lo ingresado
   document.getElementById("bodyCards").innerHTML = "";
+
+  //Opcional para borrar input
+  // if (!cartasInput.value == "") {
+  //   arrayNumeroCartas = [];
+  //   document.getElementById("bodyCards").innerHTML = "";
+  // }
 
   for (let i = 0; i < cartasInput.value; i++) {
     valoresCarta = generateCard();
@@ -95,10 +102,9 @@ const bubbleSort = arr => {
 
 function sortedCards() {
   // console.log(arrayNumeroCartas);
-  let sortedArray = bubbleSort(arrayNumeroCartas);
+  sortedArray = bubbleSort(arrayNumeroCartas);
   let cartaGenerada = document.querySelector(".row");
   document.getElementById("bodyCards").innerHTML = "";
-
   for (let i = 0; i < sortedArray.length; i++) {
     let color =
       sortedArray[i][1] === "♥" || sortedArray[i][1] === "♦"
@@ -112,5 +118,5 @@ function sortedCards() {
     </div>`;
   }
   console.log(sortedArray);
-  // sortedArray = [];
+  sortedArray = [];
 }
