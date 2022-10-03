@@ -81,7 +81,7 @@ inputLimit.addEventListener("input", function() {
   }
 });
 
-//"Sortea" las cartas
+//Esto se encarga de generar un array que sea sorteado de menor a mayor
 const bubbleSort = arr => {
   let wall = arr.length - 1; //iniciamos el wall o muro al final del array
   while (wall > 0) {
@@ -99,7 +99,7 @@ const bubbleSort = arr => {
   }
   return arr;
 };
-
+//Aca se usa la funcion bubbleSort() y se ingresa como parametro el array generado de cartas, entonces es procesado y sorteado
 function sortedCards() {
   // console.log(arrayNumeroCartas);
   sortedArray = bubbleSort(arrayNumeroCartas);
